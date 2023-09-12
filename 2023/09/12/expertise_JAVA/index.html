@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="x5-fullscreen" content="true">
+<meta name="full-screen" content="yes">
+<meta name="theme-color" content="#317EFB" />
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
+<meta name="description" content="JAVA基础1.封装 继承 多态     封装就是隐藏对象的属性和实现细节，仅对外公开接口将抽象得到的数据和行为（或功能）相结合，形成一个有机的整体     继承子类继承父类的特征和行为 多态指同一个行为具有多个不同表现形式（一个类实例（对象）的相同方法在不同情形有不同表现形式）三个必要条件  继承 重写（子类继承父类后对父类方法进行重新定义） 父类引用指向子类对象      同样是Parent类">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JAVA保底面试技巧">
+<meta property="og:url" content="https://ruihfang008.github.io/2023/09/12/expertise_JAVA/index.html">
+<meta property="og:site_name" content="江上舟">
+<meta property="og:description" content="JAVA基础1.封装 继承 多态     封装就是隐藏对象的属性和实现细节，仅对外公开接口将抽象得到的数据和行为（或功能）相结合，形成一个有机的整体     继承子类继承父类的特征和行为 多态指同一个行为具有多个不同表现形式（一个类实例（对象）的相同方法在不同情形有不同表现形式）三个必要条件  继承 重写（子类继承父类后对父类方法进行重新定义） 父类引用指向子类对象      同样是Parent类">
+<meta property="og:locale">
+<meta property="og:image" content="https://ruihfang008.github.io/img/404.jpg">
+<meta property="article:published_time" content="2023-09-12T01:46:29.000Z">
+<meta property="article:modified_time" content="2023-09-12T11:06:58.213Z">
+<meta property="article:author" content="ruihfang">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ruihfang008.github.io/img/404.jpg">
+
+
+<title >JAVA保底面试技巧</title>
+
+<!-- Favicon -->
+
+    <link href='/img/logo.jpg?v=0.0.0' rel='icon' type='image/png' sizes='16x16' ></link>
+
+
+    <link href='/img/logo.jpg?v=0.0.0' rel='icon' type='image/png' sizes='32x32' ></link>
+
+
+
+    <link href='/site.webmanifest' rel='manifest' ></link>
+
+
+<!-- Plugin -->
+
+
+
+
+    
+<link rel="stylesheet" href="/css/plugins/bootstrap.row.css">
+
+    
+<link rel="stylesheet" href="https://npm.elemecdn.com/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.css">
+
+    
+<link rel="stylesheet" href="https://npm.elemecdn.com/@fancyapps/ui@4.0/dist/fancybox.css">
+
+    
+    
+<link rel="stylesheet" href="https://npm.elemecdn.com/katex@latest/dist/katex.min.css">
+
+
+
+
+
+<!-- Icon -->
+
+    
+<link rel="stylesheet" href="/css/plugins/font-awesome.min.css">
+
+
+
+
+<!-- Variable -->
+<script>window.ASYNC_CONFIG = {"hostname":"ruihfang008.github.io","author":"ruihfang","root":"/","typed_text":["superman"],"theme_version":"0.0.0","theme":{"switch":false,"default":"style-light"},"favicon":{"logo":"/img/logo_white.jpg","dark_logo":"/img/logo.jpg","icon16":"/img/logo.jpg","icon32":"/img/logo.jpg","appleTouchIcon":null,"webmanifest":"/site.webmanifest","visibilitychange":true,"hidden":"failure.ico","showText":"(/≧▽≦/)！","hideText":"(●—●)哎呦，你干嘛！"},"i18n":{"placeholder":"搜索文章...","empty":"找不到您查询的内容: ${query}","hits":"找到 ${hits} 条结果","hits_time":"找到 ${hits} 条结果（用时 ${time} 毫秒）","author":"本文作者：","copyright_link":"本文链接：","copyright_license_title":"版权声明：","copyright_license_content":"本博客所有文章除特别声明外，均默认采用 undefined 许可协议。","copy_success":"复制成功","copy_failure":"复制失败","open_read_mode":"进入阅读模式","exit_read_mode":"退出阅读模式","notice_outdate_message":"距离上次更新已经 undefined 天了, 文章内容可能已经过时。","just":"刚刚","min":"分钟前","hour":"小时前","day":"天前","month":"个月前"},"swup":true,"plugin":{"flickr_justified_gallery":"https://npm.elemecdn.com/flickr-justified-gallery@latest/dist/fjGallery.min.js"},"icons":{"sun":"far fa-sun","moon":"far fa-moon","play":"fas fa-play","email":"far fa-envelope","next":"fas fa-arrow-right","calendar":"far fa-calendar-alt","clock":"far fa-clock","user":"far fa-user","back_top":"fas fa-arrow-up","close":"fas fa-times","search":"fas fa-search","reward":"fas fa-hand-holding-usd","user_tag":"fas fa-user-alt","toc_tag":"fas fa-th-list","read":"fas fa-book-reader","arrows":"fas fa-arrows-alt-h","double_arrows":"fas fa-angle-double-down","copy":"fas fa-copy"},"icontype":"font","highlight":{"plugin":"highlighjs","theme":true,"copy":true,"lang":true,"title":"mac","height_limit":200},"covers":["/img/block.jpg","https://s1.locimg.com/2023/05/07/cc1fbb0195365.jpg","https://s1.locimg.com/2023/05/07/25f6907576b8b.jpg","https://s1.locimg.com/2023/05/07/dba85ec12186c.jpg","https://s1.locimg.com/2023/05/07/228ba9492ccc9.jpg","https://s1.locimg.com/2023/05/07/02805a9398ee0.jpg","https://s1.locimg.com/2023/05/07/f3f98e7ceb809.jpg","https://s1.locimg.com/2023/05/07/bc05ae588667d.jpg","https://s1.locimg.com/2023/05/07/f56ce5363f2a9.jpg","https://s1.locimg.com/2023/05/07/670fda6f1dc91.jpg","https://s1.locimg.com/2023/05/07/94aec0ec9fd1d.jpg","https://s1.locimg.com/2023/05/07/bdc9155a5addb.jpg","https://s1.locimg.com/2023/05/07/d2d2a57497d23.jpg","https://s1.locimg.com/2023/05/07/174b5d40ffc47.jpg","https://s1.locimg.com/2023/05/07/4f55b4a74c645.jpg","https://s1.locimg.com/2023/05/07/e1276c4dcd482.jpg","https://s1.locimg.com/2023/05/07/ba7b25ccc5a0d.jpg","https://s1.locimg.com/2023/05/07/d3f6324c672c8.jpg","https://s1.locimg.com/2023/05/07/9fbec4c29a423.jpg","https://s1.locimg.com/2023/05/07/61084d179feef.jpg","https://s1.locimg.com/2023/05/07/cbdfae2ef21fc.png","https://s1.locimg.com/2023/05/07/7200416c6936f.png","https://s1.locimg.com/2023/05/07/beec32427135b.png","https://s1.locimg.com/2023/05/07/e89a25be8a28f.png","https://s1.locimg.com/2023/05/07/238662be98a4c.png","https://s1.locimg.com/2023/05/07/216ebd9c46e0a.png","https://s1.locimg.com/2023/05/07/df89dc28c4c3a.png","https://s1.locimg.com/2023/05/07/0d0d0cbe38281.png","https://s1.locimg.com/2023/05/07/9b60b0dd76335.png"],"creative_commons":{"license":"by-nc-sa","language":"deed.zh"},"search":{"enable":true,"type":"local","href":"https://www.google.com/search?q=site:","domain":null,"preload":true,"trigger":"auto","path":"search.xml"}};</script>
+<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2023-09-12 19:06:58"};</script>
+
+<!-- Theme mode css -->
+<link data-swup-theme rel="stylesheet" href="/css/index.css?v=0.0.0" id="trm-switch-style">
+<script>
+    let defaultMode = ASYNC_CONFIG.theme.default !=='auto' ?  ASYNC_CONFIG.theme.default : (window.matchMedia("(prefers-color-scheme: light)").matches ? 'style-light' : 'style-dark')
+    let catchMode = localStorage.getItem('theme-mode') || defaultMode;
+    let type = catchMode === 'style-dark' ? 'add' : 'remove';
+    document.documentElement.classList[type]('dark')
+</script>
+
+<!-- CDN -->
+
+
+    
+    
+
+
+
+<!-- Site Analytics -->
+ 
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+
+  <!-- app wrapper -->
+  <div class="trm-app-frame">
+
+    <!-- page preloader -->
+    <div class="trm-preloader">
+    <div class="loader">
+        <div class="inner one"></div>
+        <div class="inner two"></div>
+        <div class="inner three"></div>
+    </div>
+    <div style="margin-top: 120px;font-weight: bold;font-size: 20px;">疯狂加载中！</div>
+</div>
+    <!-- page preloader end -->
+
+    <!-- change mode preloader -->
+    <div class="trm-mode-swich-animation-frame">
+    <div class="trm-mode-swich-animation">
+        <i class="i-sun"><i class="iconfont far fa-sun"></i></i>
+        <div class="trm-horizon"></div>
+        <i class="i-moon"><i class="iconfont far fa-moon"></i></i>
+    </div>
+</div>
+    <!-- change mode preloader end -->
+
+      <!-- scroll container -->
+      <div id="trm-dynamic-content" class="trm-swup-animation">
+        <div id="trm-scroll-container" class="trm-scroll-container" data-scroll-container style="opacity: 0">
+          <div data-scroll-section id="content" class="trm-scroll-section">
+
+            <div class="locomotive-scroll__sticky-target" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none;"></div>
+
+            <!-- top bar -->
+            <header class="trm-top-bar" data-scroll data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="-10">
+	<div class="container">
+		<div class="trm-left-side">
+			<!-- logo -->
+<a href="/" class="trm-logo-frame trm-anima-link">
+    
+        <img alt="logo" class=" trm-light-icon" src="/img/logo_white.jpg"> <img alt="logo" class=" trm-dark-icon" src="/img/logo.jpg">
+    
+    
+        <div class="trm-logo-text">
+            ruih<span>fang</span>
+        </div>
+    
+</a>
+<!-- logo end -->
+		</div>
+		<div class="trm-right-side">
+			<!-- menu -->
+<div class="trm-menu">
+    <nav>
+        <ul>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/" target="">
+                    首页
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/archives/" target="">
+                    归档
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/links/" target="">
+                    友链
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/about/" target="">
+                    关于
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/customize_page/" target="">
+                    DIY
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/gallery/" target="">
+                    图片收藏
+                </a>
+                
+            </li>
+            
+        </ul>
+    </nav>
+</div>
+<!-- menu end -->
+			
+			
+		</div>
+		<div class="trm-menu-btn">
+			<span></span>
+		</div>
+	</div>
+</header>
+            <!-- top bar end -->
+
+            <!-- body -->
+            
+<div class="trm-content-start">
+    <!-- banner -->
+    <div class="trm-banner" data-scroll data-scroll-direction="vertical">
+    
+    <!-- banner cover -->
+    <img style="object-position:top;object-fit:cover;" alt="banner" class="trm-banner-cover trm-light-icon" data-scroll data-scroll-direction="vertical" data-scroll-speed="-3" src="/img/2.png"> <img style="object-position:top;object-fit:cover;" alt="banner" class="trm-banner-cover trm-dark-icon" data-scroll data-scroll-direction="vertical" data-scroll-speed="-3" src="/img/1.png">
+    <!-- banner cover end -->
+    
+
+    <!-- banner content -->
+    <div class="trm-banner-content trm-overlay">
+        <div class="container" data-scroll data-scroll-direction="vertical" data-scroll-speed="0">
+            <div class="row">
+                
+                <div class="col-lg-4"></div>
+                
+                <div class="col-lg-8">
+
+                    <!-- banner title -->
+                    <div class="trm-banner-text ">
+                        <div class="trm-label trm-mb-20">
+                            NEWS LETTER
+                        </div>
+                        <h1 class="trm-mb-30 trm-hsmb-font">
+                            JAVA保底面试技巧
+                        </h1>
+
+                        
+                            <ul class="trm-breadcrumbs trm-label">
+                                <li>
+                                    <a href="/" class="trm-anima-link">Home</a>
+                                </li>
+                                <li>
+                                    <span>
+                                        2023
+                                    </span
+                                ></li>
+                            </ul>
+                        
+                    </div>
+                    <!-- banner title end -->
+
+                    <!-- scroll hint -->
+                    <a href="#about-triger" data-scroll-to="#about-triger" data-scroll-offset="-130" class="trm-scroll-hint-frame">
+                        <div class="trm-scroll-hint"></div>
+                        <span class="trm-label">Scroll down</span>
+                    </a>
+                    <!-- scroll hint end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- banner content end -->
+</div>
+    <!-- banner end -->
+    <div class="container">
+        <div class="row">
+            
+                <div id="page-sidebar" class="col-lg-4 hidden-sm">
+                    <!-- main card -->
+                    
+
+<div class="trm-main-card-frame trm-sidebar">
+    <div class="trm-main-card" data-scroll data-scroll-repeat data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="60"> 
+    
+        <div class="trm-user-tabs" id="sidebar-tabs">
+           <div class="trm-tabs-nav trm-mb-40" id="trm-tabs-nav">
+                <div data-to="tabs-user" class="trm-tabs-nav-item">
+                    <i class="iconfont fas fa-user-alt"></i>
+                </div>
+                <div data-to="tabs-toc" class="trm-tabs-nav-item active">
+                    <i class="iconfont fas fa-th-list"></i>
+                </div>
+           </div>
+            <div name="tabs-user" class="trm-tabs-item">
+                <!-- card header -->
+<div class="trm-mc-header">
+    <div class="trm-avatar-frame trm-mb-20">
+        <img alt="Avatar" class="trm-avatar" src="https://s1.locimg.com/2023/03/31/465a70ce628dc.jpeg">
+    </div>
+    <h5 class="trm-name trm-mb-15">
+        江上舟
+    </h5>
+    
+        <div class="trm-label">
+            I`m
+            <span class="trm-typed-text">
+                <!-- Words for theme.user.typedText -->
+            </span>
+        </div>
+    
+</div>
+<!-- card header end -->
+                <!-- sidebar social -->
+
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<div class="trm-social">
+    
+        <a href="https://github.com/ruihfang008" title="Github" rel="nofollow" target="_blank">
+            <i class="iconfont fab fa-github"></i>
+        </a>
+    
+        <a href="https://weibo.com/u/7622594608" title="Weibo" rel="nofollow" target="_blank">
+            <i class="iconfont fab fa-weibo"></i>
+        </a>
+    
+        <a href="weixin://15256185032" title="Wechat" rel="nofollow" target="_blank">
+            <i class="iconfont fab fa-weixin"></i>
+        </a>
+    
+        <a href="http://wpa.qq.com/msgrd?v=3&uin=1369779064&site=qq&menu=yes" title="QQ" rel="nofollow" target="_blank">
+            <i class="iconfont fab fa-qq"></i>
+        </a>
+    
+</div>
+
+<!-- sidebar social end -->
+                <!-- info -->
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<ul class="trm-table trm-mb-20">
+    
+        <li>
+            <div class="trm-label">
+                NICKNAME:
+            </div>
+            <div class="trm-label trm-label-light">
+                江上舟
+            </div>
+        </li>
+    
+        <li>
+            <div class="trm-label">
+                CITY:
+            </div>
+            <div class="trm-label trm-label-light">
+                MengCheng, AnHui
+            </div>
+        </li>
+    
+        <li>
+            <div class="trm-label">
+                LIKE:
+            </div>
+            <div class="trm-label trm-label-light">
+                JAVA
+            </div>
+        </li>
+    
+</ul>
+<!-- info end -->
+
+                
+    <div class="trm-divider trm-mb-40 trm-mt-40"></div>
+    <!-- action button -->
+    <div class="text-center">
+        <a href="mailto:ruihfang@163.com" class="trm-btn">
+            联系我
+            <i class="iconfont far fa-envelope"></i>
+        </a>
+    </div>
+    <!-- action button end -->
+
+            </div>
+            <div name="tabs-toc" class="trm-tabs-item active">
+                <div class="post-toc">
+    <ol class="toc"><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#JAVA基础"  data-scroll-to="#JAVA基础"><span class="toc-text">JAVA基础</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#Spring"  data-scroll-to="#Spring"><span class="toc-text">Spring</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#MYSQL"  data-scroll-to="#MYSQL"><span class="toc-text">MYSQL</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#其他"  data-scroll-to="#其他"><span class="toc-text">其他</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#BK项目经历"  data-scroll-to="#BK项目经历"><span class="toc-text">BK项目经历</span></a></li></ol>
+</div>
+            </div>
+        </div>
+    
+    </div>
+</div>
+                    <!-- main card end -->
+                </div>
+            
+            <div id="page-content" class="col-lg-8">
+                <div class="trm-content" id="trm-content">
+                    <div data-scroll data-scroll-repeat data-scroll-offset="500" id="about-triger"></div>
+
+                    <div id="post-info" class="row hidden-sm">
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-calendar-alt trm-icon"></i><br>
+            09/12
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-clock trm-icon"></i><br>
+            09:46
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div id="post-author" class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-user trm-icon"></i><br>
+            ruihfang
+        </div>
+    </div>
+</div>
+<div class="trm-card ">
+    <article id="article-container" class="trm-publication">
+    <h3 id="JAVA基础"><a href="#JAVA基础" class="headerlink" title="JAVA基础"></a>JAVA基础</h3><p>1.封装 继承 多态</p>
+<p>    封装就是隐藏对象的属性和实现细节，仅对外公开接口将抽象得到的数据和行为（或功能）相结合，<strong>形成一个有机的整体</strong></p>
+<p>    继承<strong>子类继承父类的特征和行为</strong></p>
+<p>多态指同一个行为具有多个不同表现形式（一个类实例（对象）的相同方法在不同情形有不同表现形式）<strong>三个必要条件</strong></p>
+<ul>
+<li>继承</li>
+<li>重写（子类继承父类后对父类方法进行重新定义）</li>
+<li>父类引用指向子类对象</li>
+</ul>
+<p><img src="https://s1.locimg.com/2023/09/12/25b23c84ee6cf.png" alt="1694516682202.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><br>    同样是Parent类的实例，p.call调用的是Son类的实现、p1.call调用的是Daughter的实现。</p>
+<p>2.常用的类</p>
+<p>字符串：</p>
+<p>    String对象一旦创建，其值是不能修改的，如果要修改，会重新开辟内存空间来存储修改之后的对象；而StringBuffer和StringBuilder对象的值是可以被修改的；</p>
+<p>StringBuffer 线程安全(几乎所有方法都是用了synchronized)的性能低</p>
+<p>StringBuild 线程不安全但是性能高</p>
+<p>    如果我们在实际开发过程中需要对字符串进行频繁的修改，不要使用String，否则会造成内存空间的浪费；当需要考虑线程安全的场景下使用 StringBuffer，如果不需要考虑线程安全，追求效率的场景下可以使用 StringBuilder。</p>
+<p>3.集合框架</p>
+<ul>
+<li><p>Collection接口</p>
+<ul>
+<li><p>List：元素可以重复，而且是有序的，可通过下标来进行数据的访问查找修改快 增加删除慢</p>
+<ul>
+<li><p>ArrayList集合：ArrayList底层是数组可以存储任意类型的数据数据，可以重复，<strong>查询效率高，添加和删除效率低</strong>线程不安全</p>
+</li>
+<li><p>LinkedList集合：以双向链表结构实现的，所以它的<strong>增加和删除的效率高</strong>，但是他的查询效率低</p>
+</li>
+</ul>
+</li>
+<li><p>Set：无序的容器，Set接口中的数据不允许重复。查找慢，插入删除快(底层数据结构是哈希表和红黑树)，Set集合使用equals()和hashCode()方法实现元素去重</p>
+<ul>
+<li><p>HashSet 不可以按照存入顺序取出</p>
+</li>
+<li><p>LinkedHashSet:可以按照存入顺序取出</p>
+</li>
+<li><p>TreeSet 有排序功能 实现接口重写方法改写比较规则</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Map接口:以键值对方式存储数据</p>
+<ul>
+<li><p>HashMap</p>
+<ul>
+<li><p>JDK1.8之前HashMap底层是数组和链表+头插法结合在一起使用（其中存储数据时会涉及拉链冲突法  若遇到哈希冲突，则将冲突的值加到链表中即可）</p>
+</li>
+<li><p>JDK1.8之后当链表长度大于8时将链表转化成红黑树且使用尾插法</p>
+</li>
+</ul>
+</li>
+<li><p>LinkedHashMap：可以指定遍历顺序（比HashMap多维护了一个双链表）</p>
+</li>
+<li><p>TreeMap ：存储元素有序的</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>4.    并行：多个处理器或多核处理器同时处理多个任务</p>
+<p>        并发：多个任务在同一个CPU核上，按照细分的时间片轮流执行，看上去好像是在同时进行</p>
+<p>一个程序至少有一个进程，一个进程至少有一个线程，一个进程也可以有多个线程来增加程序执行的速度</p>
+<p>5.java中创建线程方法</p>
+<p>继承Thread  实现Runnable接口 线程池创建</p>
+<h3 id="Spring"><a href="#Spring" class="headerlink" title="Spring"></a>Spring</h3><p>Spring是一个轻量级的IOC和AOP容器框架。是为Java应用程序提供基础性服务的一套框架，目的是用于简化企业应用程序的开发，它使得开发者只需要关心业务需求。</p>
+<p>IOC:控制反转 负责创建对象，管理这些对象的整个生命周期    所谓IoC，对于spring框架来说，就是由spring来负责控制对象的生命周期和对象间的关系。</p>
+<p>DI: 依赖注入，控制反转是通过依赖注入实现的   动态的向某个对象提供它所需要的其他对象。这一点是通过DI（Dependency Injection，依赖注入）</p>
+<p>AOP，一般称为面向切面，作为面向对象的一种补充，用于将那些与业务无关，但却对多个对象产生影响的公共行为和逻辑，抽取并封装为一个可重用的模块，这个模块被命名为“切面”（Aspect），减少系统中的重复代码，降低了模块间的耦合度，同时提高了系统的可维护性。可用于权限认证、日志、事务处理。</p>
+<p>1.SpringMVC的流程：</p>
+<ul>
+<li><p>用户向服务端发送一次请求，这个请求会先到前端控制器DispatcherServlet(也叫中央控制器)。</p>
+</li>
+<li><p>DispatcherServlet接收到请求后会调用HandlerMapping处理器映射器。由此得知，该请求该由哪个Controller来处理（并未调用Controller，只是得知）</p>
+</li>
+<li><p>DispatcherServlet调用HandlerAdapter处理器适配器，告诉处理器适配器应该要去执行哪个Controller</p>
+</li>
+<li><p>HandlerAdapter处理器适配器去执行Controller并得到ModelAndView(数据和视图)，并层层返回给DispatcherServlet</p>
+</li>
+<li><p>DispatcherServlet将ModelAndView交给ViewReslover视图解析器解析，然后返回真正的视图。</p>
+</li>
+<li><p>DispatcherServlet将模型数据填充到视图中</p>
+</li>
+<li><p>DispatcherServlet将结果响应给用户</p>
+</li>
+</ul>
+<p>2.常见注解</p>
+<ul>
+<li><p>@Component：把资源让 spring 来管理。相当于在 xml 中配置一个 bean。</p>
+</li>
+<li><p>@Controller @Service @Repository 表现层的注解。业务层的注解。持久层的注解。</p>
+</li>
+<li><p>@Autowired自动按照类型注入。当使用注解注入属性时， set 方法可以省略</p>
+</li>
+<li><p>@Configuration用于指定当前类是一个 spring 配置类，当创建容器时会从该类上加载注解。</p>
+</li>
+<li><p>@Bean该注解写在方法上，表明使用此方法创建一个对象，并且放入 spring 容器。</p>
+</li>
+</ul>
+<h3 id="MYSQL"><a href="#MYSQL" class="headerlink" title="MYSQL"></a>MYSQL</h3><p>调优</p>
+<ul>
+<li><p>通过 explain(查询优化神器)用来查看 SQL 语句的执行效果（其中关键词key 可以判断索引是否命中）</p>
+</li>
+<li><p>任何地方都不要使用 select *不要返回用不到的任何字段；用IN来替换OR；禁止不必要的Order By排序</p>
+</li>
+<li><p>索引列不能参与计算，保持列“干净”（b+树中存的都是数据表中的字段值，但进行检索时，需要把所有元素都应用函数才能比较，显然成本太大）</p>
+</li>
+<li><p>查询尽可能使用 limit 减少返回的行数， 减少数据传输时间和带宽浪费。</p>
+</li>
+</ul>
+<p>如何避免索引失效</p>
+<ul>
+<li><p>.最佳左前缀法则：如果索引有多列，如：联合索引，要遵守最左前缀法则。指的是查询从索引的最左前列开始并且不跳过索引中的列，否则将用不到索引</p>
+</li>
+<li><p>不在索引列上做任何操作：对索引进行表达式计算会导致索引失效</p>
+</li>
+</ul>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>1、#{}和${}的区别是什么？</p>
+<p>#{}是预编译处理，${}是字符串替换。</p>
+<p>Mybatis在处理#{}时，会将sql中的#{}替换为?号，调用PreparedStatement的set方法来赋值；</p>
+<p>Mybatis在处理${}时，就是把${}替换成变量的值。</p>
+<p>使用#{}可以有效的防止SQL注入，提高系统安全性。</p>
+<p>2、get提交和post提交有何区别？</p>
+<ul>
+<li><p>get一般用于从服务器上获取数据，post一般用于向服务器传送数据</p>
+</li>
+<li><p>请求的时候参数的位置有区别：</p>
+</li>
+</ul>
+<p>get的参数是拼接在url后面，用户在浏览器地址栏可以看到</p>
+<p>post是放在http包的包体中，比如说用户注册，你不能把用户提交的注册信息用get的方式吧，那不是说把用户的注册信息都显示在Url上了吗，是不安全的</p>
+<ul>
+<li>能提交的数据有区别：</li>
+</ul>
+<p>get方式能提交的数据只能是文本，且大小不超过1024个字节</p>
+<p>post不仅可以提交文本还有二进制文件，所以说想上传文件的话，那我们就需要使用post请求方式</p>
+<h3 id="BK项目经历"><a href="#BK项目经历" class="headerlink" title="BK项目经历"></a>BK项目经历</h3><p>我们这个项目主要是炼钢质量全过程管控（QMS）的项目,一方面进行一级物料(钢管  刚板）跟踪   我们的平台会对炼钢现场采过来的一级数据进行展示（例如：转炉温度  角度 氧枪实时高度等）这个数据是随着产线生产一直变化的。然后会有进行时空转换的逻辑  例如：把时间数据转换成长度数据 (冷轧 热轧都会是用到   比如说  钢铁存在问题   会去追踪问题 可能会通过分析轧制力一级数据    刚 进去时间  出去时间   时间和轧制力的二维坐标   然后使用一级采数采上来的滚刀速度速度乘时间)   qms进行的过程数据分析     第二我们会处理追踪现场产生的二级数据（例如 某个钢坯进入产线 它的钢种钢号，厚度，宽度，加工设备，处理开始时间和结束时间 存到我们的数据库【通过同步工具进行定时启动】）</p>
+<p>一级数据： 我们通过通信协议与甲方现场plc连接获取数据  通过自研的边缘计算平台（可以在平台进行简单计算和一些不好采集数据点进行判定） 随后存在实时数据库中 显示再监控画面上</p>
+<p>二级数据：来自甲方二级数据库 检化验数据 （成分 含量） 和计量系统数据 （测长称重）等甲方测量系统同步存到我们自己mysql数据库中 用来大数据驾驶舱数据显示和一些数据分析使用</p>
+<p>大数据驾驶舱中数据：例如 月产钢量  通过mysql数据库筛选记录 （一条记录通常代表 某个钢坯进入产线，以及他的 钢种钢号，厚度，宽度）加入限制条件 相加获得。</p>
+<p>一级物料(钢管  刚板）跟踪    然后进行时空转换  把时间数据转换成长度数据 (冷轧 热轧都会是用到   比如说  刚铁存在问题   分析轧制力一级数据    刚 进去时间  出去时间   时间和轧制力的二维坐标   一级才上来的滚刀速度速度乘时间)   qms进行的过程数据分析</p>
+
+</article>
+    
+    <div class="trm-reward">
+        
+            <span class="trm-reward-btn trm-glow" onclick='var qr = document.getElementById("qr"); qr.style.display = (qr.style.display === "none") ? "block" : "none";'>
+                <i class="iconfont fas fa-hand-holding-usd"></i>
+            </span>
+        
+        <p class="trm-reward-comment">我很可爱，请给我钱</p>
+        <div id="qr" style="display:none;">
+            
+                <div style="display:inline-block">
+                    <a rel="noopener noreferrer" href='https://s1.locimg.com/2023/04/05/b6f47d8af1d57.jpg' target='_blank' >
+                       <img src="https://s1.locimg.com/2023/04/05/b6f47d8af1d57.jpg" alt="微信" loading="lazy">
+                    </a>
+                    <p>微信</p>
+                </div>
+            
+                <div style="display:inline-block">
+                    <a rel="noopener noreferrer" href='https://s1.locimg.com/2023/04/05/3657e48ccf5cd.jpg' target='_blank' >
+                       <img src="https://s1.locimg.com/2023/04/05/3657e48ccf5cd.jpg" alt="支付宝" loading="lazy">
+                    </a>
+                    <p>支付宝</p>
+                </div>
+            
+                <div style="display:inline-block">
+                    <a rel="noopener noreferrer" href='https://s1.locimg.com/2023/04/05/a69d2b83e5196.jpg' target='_blank' >
+                       <img src="https://s1.locimg.com/2023/04/05/a69d2b83e5196.jpg" alt="QQ" loading="lazy">
+                    </a>
+                    <p>QQ</p>
+                </div>
+            
+        </div>
+    </div>
+
+    
+
+<ul class="trm-post-copyright">
+    <li class="trm-post-copyright-author">
+        <strong>本文作者：</strong>
+        ruihfang
+    </li>
+    <li class="trm-post-copyright-link">
+        <strong>本文链接：</strong>
+        <a id="original-link" href="https://ruihfang008.github.io/2023/09/12/expertise_JAVA/" title="JAVA保底面试技巧">https://ruihfang008.github.io/2023/09/12/expertise_JAVA/</a>
+    </li>
+    <li class="trm-post-copyright-license">
+        <strong>版权声明：</strong>
+        本博客所有文章除特别声明外，均默认采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 ">CC BY-NC-SA 4.0</a> 许可协议。
+    </li>
+</ul>
+
+
+</div>
+<div id="post-next-prev" class="row">
+    <div class="col-lg-12">
+        <!-- title -->
+        <h5 class="trm-title-with-divider">
+            其他文章
+            <span data-number="02"></span>
+        </h5>
+    </div>
+    
+    
+        <div class="col-lg-6">
+    <div class="trm-older-publications-card trm-scroll-animation trm-active-el" data-scroll="" data-scroll-offset="40">
+        <div class="trm-older-publication">
+            
+            <a class="trm-op-top trm-anima-link" href="/2023/08/25/%E8%AE%BA%E6%96%87%E8%AE%B0%E5%BD%95/">
+                <span class="trm-op-cover">
+                    <img alt="cover" class="no-fancybox" src="/img/block.jpg">
+                </span>
+                <h6 class="trm-op-title"></h6>
+            </a>
+            <div class="trm-divider trm-mb-15 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>23/08/25</li>
+                <li>16:12</li>
+                <li>未分类</li>
+            </ul>
+        </div>
+    </div>
+</div>
+    
+</div>
+
+    
+
+
+
+                    <div class="trm-divider footer-divider"></div>
+
+                    <!-- footer -->
+                    <footer class="trm-scroll-animation" data-scroll data-scroll-offset="50">
+
+    
+
+    
+        <div class="trm-footer-item">
+            <span>© 2023- 2023</span>
+            <span class="footer-separator"data-separator=" · "></span>
+            <span class="trm-accent-color">江上舟</span>
+        </div>
+    
+
+    
+        <div class="trm-footer-item">
+            <span>
+                由 <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 驱动 v6.3.0
+            </span>
+            <span class="footer-separator" data-separator=" | "></span>
+            <span> 
+                主题 - 
+                <a rel="noopener" href='https://github.com/MaLuns/hexo-theme-async' target='_blank'>Async</a>
+                v0.0.0
+            </span>
+        </div>
+      
+
+    
+        <div class="trm-footer-item">
+            博客已在GitHub运行 <span id="since" class="trm-accent-color"></span> 天
+        </div>
+     
+
+     
+</footer>
+
+<script>
+    function show_date_time () {
+        var BirthDay = new Date("2023/04/05 17:00:00");
+        var today = new Date();
+        var timeold = (today.getTime() - BirthDay.getTime());
+        var msPerDay = 24 * 60 * 60 * 1000
+        var day = Math.floor(timeold / msPerDay)
+        since.innerHTML = day
+    }
+    show_date_time()
+</script>
+ 
+                    <!-- footer end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            <!-- body end -->
+
+            <div class="trm-fixed-container" data-scroll="data-scroll" data-scroll-sticky="data-scroll-sticky" data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="-10"><div class="trm-fixed-btn" id="trm-search-btn" data-title="查询"><i class="iconfont fas fa-search"></i></div><div class="trm-fixed-btn" data-title="切换主题模式" onclick="asyncFun.switchThemeMode(document.documentElement.classList.contains('dark')?'style-light':'style-dark')"><i class="fas fa-sun"></i></div><div class="trm-fixed-btn" data-title="阅读模式" onclick="asyncFun.switchReadMode()"><i class="iconfont fas fa-book-reader"></i></div><div class="trm-fixed-btn" data-title="单栏和双栏切换" onclick="asyncFun.switchSingleColumn()"><i class="iconfont fas fa-arrows-alt-h"></i></div><div class="trm-fixed-btn" id="trm-back-top" data-title="回到顶部"><i class="iconfont fas fa-arrow-up"></i></div></div>
+          </div>
+        </div>
+      </div>
+      <!-- scroll container end -->
+
+  </div>
+  <!-- app wrapper end -->
+
+  
+    <div class="trm-search-popup">
+        <div class="trm-search-wrapper">
+            <div class="form trm-search-form">
+                <div class="trm-search-input-icon">
+                    <i class="iconfont fas fa-search"></i>
+                </div>
+                <input class="trm-search-input" type="text" placeholder="搜索文章...">
+                <div class="trm-search-btn-close">
+                    <i class="iconfont fas fa-times"></i>
+                </div>
+            </div>
+            <div class="trm-search-result-container">
+                <div class="trm-search-empty">
+                    请输入关键词进行搜索
+                </div>
+            </div>
+            <div class="trm-search-footer">
+                <div class="trm-search-stats"></div>
+                <ul class="trm-search-commands">
+                    <li>
+                        <kbd class="command-palette-commands-key">
+                            <svg width="15" height="15" aria-label="Escape key" role="img">
+                                <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="1.2">
+                                    <path
+                                        d="M13.6167 8.936c-.1065.3583-.6883.962-1.4875.962-.7993 0-1.653-.9165-1.653-2.1258v-.5678c0-1.2548.7896-2.1016 1.653-2.1016.8634 0 1.3601.4778 1.4875 1.0724M9 6c-.1352-.4735-.7506-.9219-1.46-.8972-.7092.0246-1.344.57-1.344 1.2166s.4198.8812 1.3445.9805C8.465 7.3992 8.968 7.9337 9 8.5c.032.5663-.454 1.398-1.4595 1.398C6.6593 9.898 6 9 5.963 8.4851m-1.4748.5368c-.2635.5941-.8099.876-1.5443.876s-1.7073-.6248-1.7073-2.204v-.4603c0-1.0416.721-2.131 1.7073-2.131.9864 0 1.6425 1.031 1.5443 2.2492h-2.956">
+                                    </path>
+                                </g>
+                            </svg>
+                        </kbd>
+                        <span class="command-palette-Label">to close</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+  <!-- Plugin -->
+
+
+
+
+    
+<script src="https://npm.elemecdn.com/swup@2.0.19/dist/swup.min.js"></script>
+
+    
+<script src="https://npm.elemecdn.com/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.js"></script>
+
+    
+<script src="https://npm.elemecdn.com/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+
+    
+
+    
+        <script src="/plugins/typing.js?v=0.0.0"></script>
+    
+
+    
+        
+<script src="https://npm.elemecdn.com/hexo-generator-searchdb@1.4.0/dist/search.js"></script>
+
+        <script src="/plugins/local_search.js?v=0.0.0"></script>
+    
+
+    <!-- 数学公式 -->
+    
+        
+<script src="https://npm.elemecdn.com/katex@latest/dist/katex.min.js" data-swup-reload-script></script>
+
+        
+            
+<script src="https://npm.elemecdn.com/katex@latest/dist/contrib/copy-tex.min.js" data-swup-reload-script></script>
+
+        
+        
+<script src="https://npm.elemecdn.com/katex@latest/dist/contrib/auto-render.min.js" data-swup-reload-script></script>
+
+        <script data-swup-reload-script>
+              window.renderMathInElement(document.body, {
+                delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '$', right: '$', display: false },
+                    { left: '\\(', right: '\\)', display: false },
+                    { left: '\\[', right: '\\]', display: true },
+                ],
+                ...{},
+            })
+        </script>
+    
+
+    <!-- 评论插件 -->
+    
+        
+
+        
+    
+
+
+
+<!-- CDN -->
+
+
+    
+<script src="/demo.js"></script>
+
+
+    
+
+    
+
+
+
+
+    <!-- Service Worker -->
+    
+    <!-- baidu push -->
+    
+    <script data-swup-reload-script>
+        (function () {
+            var bp = document.createElement('script');
+            var curProtocol = window.location.protocol.split(':')[0];
+            if (curProtocol === 'https') {
+                bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+            }
+            else {
+                bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+            }
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(bp, s);
+        })();
+    </script>
+
+
+
+<script id="async-script" src="/main.js?v=0.0.0"></script>
+
+</body>
+
+</html>
