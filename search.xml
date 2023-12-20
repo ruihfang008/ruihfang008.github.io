@@ -26,6 +26,260 @@
       </categories>
   </entry>
   <entry>
+    <title>HTTP &amp; HTTPS</title>
+    <url>/2023/05/07/expertise_HTTP/</url>
+    <content><![CDATA[<h1 id="HTTP-amp-HTTPS-区别于联系"><a href="#HTTP-amp-HTTPS-区别于联系" class="headerlink" title="HTTP &amp; HTTPS 区别于联系"></a>HTTP &amp; HTTPS 区别于联系</h1><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><blockquote>
+<p>http: 以明文的形式传递信息（可能数据劫持，然后从服务器返回给用户的数据中加入广告）</p>
+</blockquote>
+<blockquote>
+<p>https: 通过密文传递信息（一开始考虑使用非对称加密）</p>
+</blockquote>
+<h3 id="1-https-工作流程"><a href="#1-https-工作流程" class="headerlink" title="1. https 工作流程"></a>1. https 工作流程</h3><p><strong>配置有公钥和私钥</strong>：<em><strong>并且采用非对称加密。<br/>公钥加密 -&gt;私钥解密 公钥加密 ×公钥解不了密<br/> 私钥加密 -&gt;公钥解密  私钥也解不了</strong></em></p>
+<img src="https://s1.locimg.com/2023/05/07/118cd3c9c2a5f.png" title="" alt="HTTPS工作模式" width="622" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'>
+
+<hr>
+<h3 id="2-服务器与浏览器中的HTTPS-SSL"><a href="#2-服务器与浏览器中的HTTPS-SSL" class="headerlink" title="2. 服务器与浏览器中的HTTPS(SSL)"></a>2. 服务器与浏览器中的HTTPS(<mark>SSL</mark>)</h3><p><img src="https://s1.locimg.com/2023/05/07/d0a3d8ea0b206.png" alt="1683429094682.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><br><br/></p>
+<ul>
+<li><p><strong>服务器先把自己公钥发给浏览器</strong></p>
+</li>
+<li><p><strong>浏览器生成一个随机数据</strong></p>
+</li>
+<li><p><strong>用公钥对随机数加密</strong></p>
+</li>
+<li><p><strong>发送给服务器</strong></p>
+</li>
+<li><p><strong>服务器用自己的私钥解密</strong></p>
+</li>
+<li><p><strong>如此双方得到了同样的随机数据  既随机加密数据的密钥  -&gt;用该密钥对称加密所需要传递的数据</strong></p>
+</li>
+</ul>
+<p><u><em><strong>这是一套独立于http的流程 即安全套接字层  Secure Sokect Layer  SSL</strong></em></u></p>
+<p><strong>SSL1.0(1994)-&gt;SSL2.0(1995)-&gt;SSL3.0(1996)-&gt;TLS1.0(1999)又称”SSL3.1”</strong></p>
+<h3 id="3-存在问题"><a href="#3-存在问题" class="headerlink" title="3. 存在问题"></a>3. 存在问题</h3><p><strong>例如</strong><br><img src="https://s1.locimg.com/2023/05/07/8f7a7161b7492.png" alt="1683429549688.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<hr>
+<p><img src="https://s1.locimg.com/2023/05/07/83711cc9ff7aa.png" alt="1683429572572.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<ul>
+<li><p><strong>服务器发送公钥时候被中间拦截</strong></p>
+</li>
+<li><p><strong>转发给浏览器虚假的公钥</strong></p>
+</li>
+<li><p><strong>浏览器不认识公钥是谁的直接使用虚假的公钥加密随机数然后发送给服务器</strong></p>
+</li>
+<li><p><strong>发送途中再拦截浏览器使用虚假公钥加密的随机数</strong></p>
+</li>
+<li><p><strong>使用虚假的私钥解密得到随机数</strong> </p>
+</li>
+<li><p><strong>再使用服务器的公钥加密回去发回给服务器</strong></p>
+<br/>
+问题出在  <font color=red><u>公钥不能表示自己属于谁？</u></font>
+<br>
+解决办法  <u>引入第三方     <font color=red>CA</font></u>
+<br></li>
+</ul>
+<hr>
+<h2 id="CA（Certificate-Authority）"><a href="#CA（Certificate-Authority）" class="headerlink" title="CA（Certificate Authority）"></a>CA（Certificate Authority）</h2><h3 id="1-使用CA后工作流程"><a href="#1-使用CA后工作流程" class="headerlink" title="1. 使用CA后工作流程"></a>1. 使用CA后工作流程</h3><ul>
+<li><p>服务器将自己信息<img src="https://s1.locimg.com/2023/05/07/4372dfeeff504.png" alt="1683454048784.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'>去找第三方机构（CACertificate Authority）<img src="https://s1.locimg.com/2023/05/07/86c5b6be01968.png" alt="1683454069860.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'>CA（拥有自己的公私钥对）用自己的私钥对数据集合进行加密得到的密文（称之为<code>签名</code>）</p>
+</li>
+<li><p>然后把带着签名的数据集合发给服务器<img src="https://s1.locimg.com/2023/05/07/65f85a884d04b.png" alt="1683454088188.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'>服务器把TLS证书传递给浏览器</p>
+</li>
+</ul>
+<p><img src="https://s1.locimg.com/2023/05/07/d0204ca10c38d.png" alt="1683454106669.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'>浏览器拿着CA给的公钥对密文进行解密</p>
+<ul>
+<li><p>如果解密的结果和证书中的明文一直则通过  如果不通过风险提示！<img src="https://s1.locimg.com/2023/05/07/edb51e123699a.png" alt="1683454119844.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'>-</p>
+</li>
+<li><p>然后从证书中提取服务器的公钥加密随机数发送 协商出密钥进行传输。</p>
+<p><img src="https://s1.locimg.com/2023/05/07/147695db4e747.png" alt="1683454135892.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'>### 2. CA服务商</p>
+<p><strong>CA google microsoft</strong></p>
+</li>
+</ul>
+<h3 id="3-CA存在问题"><a href="#3-CA存在问题" class="headerlink" title="3. CA存在问题"></a>3. CA存在问题</h3><p>浏览器内置信任的CA证书（此时CA便是中心，<mark>问题CA是否值得100%信任？</mark>）</p>
+<p>问题最终还是要<strong>去中心化</strong></p>
+<hr>
+<h2 id="CT-Certificate-Transparency"><a href="#CT-Certificate-Transparency" class="headerlink" title="CT(Certificate Transparency)"></a>CT(Certificate Transparency)</h2><h3 id="1-工作流程"><a href="#1-工作流程" class="headerlink" title="1. 工作流程"></a>1. 工作流程</h3><p><img src="https://s1.locimg.com/2023/05/07/284ade29e5937.png" alt="1683454175652.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><img src="https://s1.locimg.com/2023/05/07/751674e219ed4.png" alt="1683454191242.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'>这种操作看上去如同<code>套娃</code>  还是没有做到真正的<strong>CT</strong>   于是再日志服务中引入 <mark>墨克尔树</mark></p>
+<p><img src="https://s1.locimg.com/2023/05/07/fe4b90c216edc.png" alt="1683450937205.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p>在这个墨克尔树中<strong>修改任意记录根哈希值都会改变</strong>  这样可以做到相对意义上得<u><mark>去中心化</mark></u></p>
+<h3 id="2-CT机制"><a href="#2-CT机制" class="headerlink" title="2. CT机制"></a>2. CT机制</h3><p><img src="https://s1.locimg.com/2023/05/07/00a9dc172f039.png" alt="1683454235288.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'>一开始CT作为CA证书中的可选项目CA机构还可以选择不向日志服务上报而逃避审查 现在不行了</p>
+<p><img src="https://s1.locimg.com/2023/05/07/d60faef7a47ab.png" alt="1683454254456.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+]]></content>
+      <categories>
+        <category>专业技能</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Hello Theme Async</title>
+    <url>/2022/09/21/hello-world/</url>
+    <content><![CDATA[<p><img src="https://hexo-theme-async.imalun.com/imgs/demo2.png" alt="1663833969157.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><em>示例图</em></p>
+<p>Welcome to <a href="https://hexo-theme-async.imalun.com/">hexo-theme-async</a>.</p>
+<span id="more"></span>
+
+<h2 id="Hexo-Theme-Async"><a href="#Hexo-Theme-Async" class="headerlink" title="Hexo Theme Async"></a>Hexo Theme Async</h2><ul>
+<li>docs: <a href="https://hexo-theme-async.imalun.com/">https://hexo-theme-async.imalun.com/</a></li>
+</ul>
+<h2 id="Hexo"><a href="#Hexo" class="headerlink" title="Hexo"></a>Hexo</h2><p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+      <categories>
+        <category>博客使用</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>JAVA保底面试技巧</title>
+    <url>/2023/09/12/expertise_JAVA/</url>
+    <content><![CDATA[<h3 id="JAVA基础"><a href="#JAVA基础" class="headerlink" title="JAVA基础"></a>JAVA基础</h3><p>1.封装 继承 多态</p>
+<p>    封装就是隐藏对象的属性和实现细节，仅对外公开接口将抽象得到的数据和行为（或功能）相结合，<strong>形成一个有机的整体</strong></p>
+<p>    继承<strong>子类继承父类的特征和行为</strong></p>
+<p>多态指同一个行为具有多个不同表现形式（一个类实例（对象）的相同方法在不同情形有不同表现形式）<strong>三个必要条件</strong></p>
+<ul>
+<li>继承</li>
+<li>重写（子类继承父类后对父类方法进行重新定义）</li>
+<li>父类引用指向子类对象</li>
+</ul>
+<p><img src="https://s1.locimg.com/2023/09/12/25b23c84ee6cf.png" alt="1694516682202.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><br>    同样是Parent类的实例，p.call调用的是Son类的实现、p1.call调用的是Daughter的实现。</p>
+<p>2.常用的类</p>
+<p>字符串：</p>
+<p>    String对象一旦创建，其值是不能修改的，如果要修改，会重新开辟内存空间来存储修改之后的对象；而StringBuffer和StringBuilder对象的值是可以被修改的；</p>
+<p>StringBuffer 线程安全(几乎所有方法都是用了synchronized)的性能低</p>
+<p>StringBuild 线程不安全但是性能高</p>
+<p>    如果我们在实际开发过程中需要对字符串进行频繁的修改，不要使用String，否则会造成内存空间的浪费；当需要考虑线程安全的场景下使用 StringBuffer，如果不需要考虑线程安全，追求效率的场景下可以使用 StringBuilder。</p>
+<p>3.集合框架</p>
+<ul>
+<li><p>Collection接口</p>
+<ul>
+<li><p>List：元素可以重复，而且是有序的，可通过下标来进行数据的访问查找修改快 增加删除慢</p>
+<ul>
+<li><p>ArrayList集合：ArrayList底层是数组可以存储任意类型的数据数据，可以重复，<strong>查询效率高，添加和删除效率低</strong>线程不安全</p>
+</li>
+<li><p>LinkedList集合：以双向链表结构实现的，所以它的<strong>增加和删除的效率高</strong>，但是他的查询效率低</p>
+</li>
+</ul>
+</li>
+<li><p>Set：无序的容器，Set接口中的数据不允许重复。查找慢，插入删除快(底层数据结构是哈希表和红黑树)，Set集合使用equals()和hashCode()方法实现元素去重</p>
+<ul>
+<li><p>HashSet 不可以按照存入顺序取出</p>
+</li>
+<li><p>LinkedHashSet:可以按照存入顺序取出</p>
+</li>
+<li><p>TreeSet 有排序功能 实现接口重写方法改写比较规则</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Map接口:以键值对方式存储数据</p>
+<ul>
+<li><p>HashMap</p>
+<ul>
+<li><p>JDK1.8之前HashMap底层是数组和链表+头插法结合在一起使用（其中存储数据时会涉及拉链冲突法  若遇到哈希冲突，则将冲突的值加到链表中即可）</p>
+</li>
+<li><p>JDK1.8之后当链表长度大于8时将链表转化成红黑树且使用尾插法</p>
+</li>
+</ul>
+</li>
+<li><p>LinkedHashMap：可以指定遍历顺序（比HashMap多维护了一个双链表）</p>
+</li>
+<li><p>TreeMap ：存储元素有序的</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>4.    并行：多个处理器或多核处理器同时处理多个任务</p>
+<p>        并发：多个任务在同一个CPU核上，按照细分的时间片轮流执行，看上去好像是在同时进行</p>
+<p>一个程序至少有一个进程，一个进程至少有一个线程，一个进程也可以有多个线程来增加程序执行的速度</p>
+<p>5.java中创建线程方法</p>
+<p>继承Thread  实现Runnable接口 线程池创建</p>
+<h3 id="Spring"><a href="#Spring" class="headerlink" title="Spring"></a>Spring</h3><p>Spring是一个轻量级的IOC和AOP容器框架。是为Java应用程序提供基础性服务的一套框架，目的是用于简化企业应用程序的开发，它使得开发者只需要关心业务需求。</p>
+<p>IOC:控制反转 负责创建对象，管理这些对象的整个生命周期    所谓IoC，对于spring框架来说，就是由spring来负责控制对象的生命周期和对象间的关系。</p>
+<p>DI: 依赖注入，控制反转是通过依赖注入实现的   动态的向某个对象提供它所需要的其他对象。这一点是通过DI（Dependency Injection，依赖注入）</p>
+<p>AOP，一般称为面向切面，作为面向对象的一种补充，用于将那些与业务无关，但却对多个对象产生影响的公共行为和逻辑，抽取并封装为一个可重用的模块，这个模块被命名为“切面”（Aspect），减少系统中的重复代码，降低了模块间的耦合度，同时提高了系统的可维护性。可用于权限认证、日志、事务处理。</p>
+<p>1.SpringMVC的流程：</p>
+<ul>
+<li><p>用户向服务端发送一次请求，这个请求会先到前端控制器DispatcherServlet(也叫中央控制器)。</p>
+</li>
+<li><p>DispatcherServlet接收到请求后会调用HandlerMapping处理器映射器。由此得知，该请求该由哪个Controller来处理（并未调用Controller，只是得知）</p>
+</li>
+<li><p>DispatcherServlet调用HandlerAdapter处理器适配器，告诉处理器适配器应该要去执行哪个Controller</p>
+</li>
+<li><p>HandlerAdapter处理器适配器去执行Controller并得到ModelAndView(数据和视图)，并层层返回给DispatcherServlet</p>
+</li>
+<li><p>DispatcherServlet将ModelAndView交给ViewReslover视图解析器解析，然后返回真正的视图。</p>
+</li>
+<li><p>DispatcherServlet将模型数据填充到视图中</p>
+</li>
+<li><p>DispatcherServlet将结果响应给用户</p>
+</li>
+</ul>
+<p>2.常见注解</p>
+<ul>
+<li><p>@Component：把资源让 spring 来管理。相当于在 xml 中配置一个 bean。</p>
+</li>
+<li><p>@Controller @Service @Repository 表现层的注解。业务层的注解。持久层的注解。</p>
+</li>
+<li><p>@Autowired自动按照类型注入。当使用注解注入属性时， set 方法可以省略</p>
+</li>
+<li><p>@Configuration用于指定当前类是一个 spring 配置类，当创建容器时会从该类上加载注解。</p>
+</li>
+<li><p>@Bean该注解写在方法上，表明使用此方法创建一个对象，并且放入 spring 容器。</p>
+</li>
+</ul>
+<h3 id="MYSQL"><a href="#MYSQL" class="headerlink" title="MYSQL"></a>MYSQL</h3><p>调优</p>
+<ul>
+<li><p>通过 explain(查询优化神器)用来查看 SQL 语句的执行效果（其中关键词key 可以判断索引是否命中）</p>
+</li>
+<li><p>任何地方都不要使用 select *不要返回用不到的任何字段；用IN来替换OR；禁止不必要的Order By排序</p>
+</li>
+<li><p>索引列不能参与计算，保持列“干净”（b+树中存的都是数据表中的字段值，但进行检索时，需要把所有元素都应用函数才能比较，显然成本太大）</p>
+</li>
+<li><p>查询尽可能使用 limit 减少返回的行数， 减少数据传输时间和带宽浪费。</p>
+</li>
+</ul>
+<p>如何避免索引失效</p>
+<ul>
+<li><p>.最佳左前缀法则：如果索引有多列，如：联合索引，要遵守最左前缀法则。指的是查询从索引的最左前列开始并且不跳过索引中的列，否则将用不到索引</p>
+</li>
+<li><p>不在索引列上做任何操作：对索引进行表达式计算会导致索引失效</p>
+</li>
+</ul>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>1、#{}和${}的区别是什么？</p>
+<p>#{}是预编译处理，${}是字符串替换。</p>
+<p>Mybatis在处理#{}时，会将sql中的#{}替换为?号，调用PreparedStatement的set方法来赋值；</p>
+<p>Mybatis在处理${}时，就是把${}替换成变量的值。</p>
+<p>使用#{}可以有效的防止SQL注入，提高系统安全性。</p>
+<p>2、get提交和post提交有何区别？</p>
+<ul>
+<li><p>get一般用于从服务器上获取数据，post一般用于向服务器传送数据</p>
+</li>
+<li><p>请求的时候参数的位置有区别：</p>
+</li>
+</ul>
+<p>get的参数是拼接在url后面，用户在浏览器地址栏可以看到</p>
+<p>post是放在http包的包体中，比如说用户注册，你不能把用户提交的注册信息用get的方式吧，那不是说把用户的注册信息都显示在Url上了吗，是不安全的</p>
+<ul>
+<li>能提交的数据有区别：</li>
+</ul>
+<p>get方式能提交的数据只能是文本，且大小不超过1024个字节</p>
+<p>post不仅可以提交文本还有二进制文件，所以说想上传文件的话，那我们就需要使用post请求方式</p>
+<h3 id="BK项目经历"><a href="#BK项目经历" class="headerlink" title="BK项目经历"></a>BK项目经历</h3><p>我们这个项目主要是炼钢质量全过程管控（QMS）的项目,一方面进行一级物料(钢管  刚板）跟踪   我们的平台会对炼钢现场采过来的一级数据进行展示（例如：转炉温度  角度 氧枪实时高度等）这个数据是随着产线生产一直变化的。然后会有进行时空转换的逻辑  例如：把时间数据转换成长度数据 (冷轧 热轧都会是用到   比如说  钢铁存在问题   会去追踪问题 可能会通过分析轧制力一级数据    刚 进去时间  出去时间   时间和轧制力的二维坐标   然后使用一级采数采上来的滚刀速度速度乘时间)   qms进行的过程数据分析     第二我们会处理追踪现场产生的二级数据（例如 某个钢坯进入产线 它的钢种钢号，厚度，宽度，加工设备，处理开始时间和结束时间 存到我们的数据库【通过同步工具进行定时启动】）</p>
+<p>一级数据： 我们通过通信协议与甲方现场plc连接获取数据  通过自研的边缘计算平台（可以在平台进行简单计算和一些不好采集数据点进行判定） 随后存在实时数据库中 显示再监控画面上</p>
+<p>二级数据：来自甲方二级数据库 检化验数据 （成分 含量） 和计量系统数据 （测长称重）等甲方测量系统同步存到我们自己mysql数据库中 用来大数据驾驶舱数据显示和一些数据分析使用</p>
+<p>大数据驾驶舱中数据：例如 月产钢量  通过mysql数据库筛选记录 （一条记录通常代表 某个钢坯进入产线，以及他的 钢种钢号，厚度，宽度）加入限制条件 相加获得。</p>
+<p>一级物料(钢管  刚板）跟踪    然后进行时空转换  把时间数据转换成长度数据 (冷轧 热轧都会是用到   比如说  刚铁存在问题   分析轧制力一级数据    刚 进去时间  出去时间   时间和轧制力的二维坐标   一级才上来的滚刀速度速度乘时间)   qms进行的过程数据分析</p>
+]]></content>
+      <categories>
+        <category>专业技能</category>
+      </categories>
+  </entry>
+  <entry>
     <title>KaTeX</title>
     <url>/2022/09/22/katex/</url>
     <content><![CDATA[<h2 id="KaTeX"><a href="#KaTeX" class="headerlink" title="KaTeX"></a>KaTeX</h2><ul>
@@ -102,34 +356,6 @@ $$
 </div>
 
 <figure class="highlight latex"><table><tr><td class="code"><pre><span class="line">&lt;div&gt;</span><br><span class="line"><span class="built_in">$</span><span class="built_in">$</span></span><br><span class="line"><span class="keyword">\begin</span>&#123;equation&#125;</span><br><span class="line">  <span class="keyword">\left</span><span class="keyword">\&#123;</span></span><br><span class="line">    <span class="keyword">\begin</span>&#123;aligned&#125;</span><br><span class="line">      x=a<span class="keyword">\cos</span><span class="keyword">\theta</span><span class="keyword">\\</span></span><br><span class="line">      y=b<span class="keyword">\sin</span><span class="keyword">\theta</span><span class="keyword">\\</span></span><br><span class="line">    end&#123;aligned&#125;</span><br><span class="line">  <span class="keyword">\right</span>.</span><br><span class="line"><span class="keyword">\end</span>&#123;equation&#125;</span><br><span class="line"><span class="built_in">$</span><span class="built_in">$</span></span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>博客使用</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>Hello Theme Async</title>
-    <url>/2022/09/21/hello-world/</url>
-    <content><![CDATA[<p><img src="https://hexo-theme-async.imalun.com/imgs/demo2.png" alt="1663833969157.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><em>示例图</em></p>
-<p>Welcome to <a href="https://hexo-theme-async.imalun.com/">hexo-theme-async</a>.</p>
-<span id="more"></span>
-
-<h2 id="Hexo-Theme-Async"><a href="#Hexo-Theme-Async" class="headerlink" title="Hexo Theme Async"></a>Hexo Theme Async</h2><ul>
-<li>docs: <a href="https://hexo-theme-async.imalun.com/">https://hexo-theme-async.imalun.com/</a></li>
-</ul>
-<h2 id="Hexo"><a href="#Hexo" class="headerlink" title="Hexo"></a>Hexo</h2><p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
 ]]></content>
       <categories>
         <category>博客使用</category>
@@ -453,86 +679,6 @@ $$
       </categories>
   </entry>
   <entry>
-    <title>HTTP &amp; HTTPS</title>
-    <url>/2023/05/07/expertise_HTTP/</url>
-    <content><![CDATA[<h1 id="HTTP-amp-HTTPS-区别于联系"><a href="#HTTP-amp-HTTPS-区别于联系" class="headerlink" title="HTTP &amp; HTTPS 区别于联系"></a>HTTP &amp; HTTPS 区别于联系</h1><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><blockquote>
-<p>http: 以明文的形式传递信息（可能数据劫持，然后从服务器返回给用户的数据中加入广告）</p>
-</blockquote>
-<blockquote>
-<p>https: 通过密文传递信息（一开始考虑使用非对称加密）</p>
-</blockquote>
-<h3 id="1-https-工作流程"><a href="#1-https-工作流程" class="headerlink" title="1. https 工作流程"></a>1. https 工作流程</h3><p><strong>配置有公钥和私钥</strong>：<em><strong>并且采用非对称加密。<br/>公钥加密 -&gt;私钥解密 公钥加密 ×公钥解不了密<br/> 私钥加密 -&gt;公钥解密  私钥也解不了</strong></em></p>
-<img src="https://s1.locimg.com/2023/05/07/118cd3c9c2a5f.png" title="" alt="HTTPS工作模式" width="622" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'>
-
-<hr>
-<h3 id="2-服务器与浏览器中的HTTPS-SSL"><a href="#2-服务器与浏览器中的HTTPS-SSL" class="headerlink" title="2. 服务器与浏览器中的HTTPS(SSL)"></a>2. 服务器与浏览器中的HTTPS(<mark>SSL</mark>)</h3><p><img src="https://s1.locimg.com/2023/05/07/d0a3d8ea0b206.png" alt="1683429094682.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><br><br/></p>
-<ul>
-<li><p><strong>服务器先把自己公钥发给浏览器</strong></p>
-</li>
-<li><p><strong>浏览器生成一个随机数据</strong></p>
-</li>
-<li><p><strong>用公钥对随机数加密</strong></p>
-</li>
-<li><p><strong>发送给服务器</strong></p>
-</li>
-<li><p><strong>服务器用自己的私钥解密</strong></p>
-</li>
-<li><p><strong>如此双方得到了同样的随机数据  既随机加密数据的密钥  -&gt;用该密钥对称加密所需要传递的数据</strong></p>
-</li>
-</ul>
-<p><u><em><strong>这是一套独立于http的流程 即安全套接字层  Secure Sokect Layer  SSL</strong></em></u></p>
-<p><strong>SSL1.0(1994)-&gt;SSL2.0(1995)-&gt;SSL3.0(1996)-&gt;TLS1.0(1999)又称”SSL3.1”</strong></p>
-<h3 id="3-存在问题"><a href="#3-存在问题" class="headerlink" title="3. 存在问题"></a>3. 存在问题</h3><p><strong>例如</strong><br><img src="https://s1.locimg.com/2023/05/07/8f7a7161b7492.png" alt="1683429549688.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<hr>
-<p><img src="https://s1.locimg.com/2023/05/07/83711cc9ff7aa.png" alt="1683429572572.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<ul>
-<li><p><strong>服务器发送公钥时候被中间拦截</strong></p>
-</li>
-<li><p><strong>转发给浏览器虚假的公钥</strong></p>
-</li>
-<li><p><strong>浏览器不认识公钥是谁的直接使用虚假的公钥加密随机数然后发送给服务器</strong></p>
-</li>
-<li><p><strong>发送途中再拦截浏览器使用虚假公钥加密的随机数</strong></p>
-</li>
-<li><p><strong>使用虚假的私钥解密得到随机数</strong> </p>
-</li>
-<li><p><strong>再使用服务器的公钥加密回去发回给服务器</strong></p>
-<br/>
-问题出在  <font color=red><u>公钥不能表示自己属于谁？</u></font>
-<br>
-解决办法  <u>引入第三方     <font color=red>CA</font></u>
-<br></li>
-</ul>
-<hr>
-<h2 id="CA（Certificate-Authority）"><a href="#CA（Certificate-Authority）" class="headerlink" title="CA（Certificate Authority）"></a>CA（Certificate Authority）</h2><h3 id="1-使用CA后工作流程"><a href="#1-使用CA后工作流程" class="headerlink" title="1. 使用CA后工作流程"></a>1. 使用CA后工作流程</h3><ul>
-<li><p>服务器将自己信息<img src="https://s1.locimg.com/2023/05/07/4372dfeeff504.png" alt="1683454048784.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'>去找第三方机构（CACertificate Authority）<img src="https://s1.locimg.com/2023/05/07/86c5b6be01968.png" alt="1683454069860.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'>CA（拥有自己的公私钥对）用自己的私钥对数据集合进行加密得到的密文（称之为<code>签名</code>）</p>
-</li>
-<li><p>然后把带着签名的数据集合发给服务器<img src="https://s1.locimg.com/2023/05/07/65f85a884d04b.png" alt="1683454088188.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'>服务器把TLS证书传递给浏览器</p>
-</li>
-</ul>
-<p><img src="https://s1.locimg.com/2023/05/07/d0204ca10c38d.png" alt="1683454106669.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'>浏览器拿着CA给的公钥对密文进行解密</p>
-<ul>
-<li><p>如果解密的结果和证书中的明文一直则通过  如果不通过风险提示！<img src="https://s1.locimg.com/2023/05/07/edb51e123699a.png" alt="1683454119844.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'>-</p>
-</li>
-<li><p>然后从证书中提取服务器的公钥加密随机数发送 协商出密钥进行传输。</p>
-<p><img src="https://s1.locimg.com/2023/05/07/147695db4e747.png" alt="1683454135892.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'>### 2. CA服务商</p>
-<p><strong>CA google microsoft</strong></p>
-</li>
-</ul>
-<h3 id="3-CA存在问题"><a href="#3-CA存在问题" class="headerlink" title="3. CA存在问题"></a>3. CA存在问题</h3><p>浏览器内置信任的CA证书（此时CA便是中心，<mark>问题CA是否值得100%信任？</mark>）</p>
-<p>问题最终还是要<strong>去中心化</strong></p>
-<hr>
-<h2 id="CT-Certificate-Transparency"><a href="#CT-Certificate-Transparency" class="headerlink" title="CT(Certificate Transparency)"></a>CT(Certificate Transparency)</h2><h3 id="1-工作流程"><a href="#1-工作流程" class="headerlink" title="1. 工作流程"></a>1. 工作流程</h3><p><img src="https://s1.locimg.com/2023/05/07/284ade29e5937.png" alt="1683454175652.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><img src="https://s1.locimg.com/2023/05/07/751674e219ed4.png" alt="1683454191242.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'>这种操作看上去如同<code>套娃</code>  还是没有做到真正的<strong>CT</strong>   于是再日志服务中引入 <mark>墨克尔树</mark></p>
-<p><img src="https://s1.locimg.com/2023/05/07/fe4b90c216edc.png" alt="1683450937205.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p>在这个墨克尔树中<strong>修改任意记录根哈希值都会改变</strong>  这样可以做到相对意义上得<u><mark>去中心化</mark></u></p>
-<h3 id="2-CT机制"><a href="#2-CT机制" class="headerlink" title="2. CT机制"></a>2. CT机制</h3><p><img src="https://s1.locimg.com/2023/05/07/00a9dc172f039.png" alt="1683454235288.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'>一开始CT作为CA证书中的可选项目CA机构还可以选择不向日志服务上报而逃避审查 现在不行了</p>
-<p><img src="https://s1.locimg.com/2023/05/07/d60faef7a47ab.png" alt="1683454254456.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-]]></content>
-      <categories>
-        <category>专业技能</category>
-      </categories>
-  </entry>
-  <entry>
     <title>HVV常见面试技巧</title>
     <url>/2023/05/31/expertise_HVV/</url>
     <content><![CDATA[<h1 id="护网行动面试技巧"><a href="#护网行动面试技巧" class="headerlink" title="护网行动面试技巧"></a>护网行动面试技巧</h1><h2 id="1-描述一下外网打点的基本流程"><a href="#1-描述一下外网打点的基本流程" class="headerlink" title="1.描述一下外网打点的基本流程?"></a>1.描述一下外网打点的基本流程?</h2><p>外网打点的基本流程主要分为:靶标确认、信息收集、漏洞探测、漏洞利用、权限获取,其最终目的是为了获取靶标的系统权限&#x2F;关键数据。</p>
@@ -604,152 +750,6 @@ $$
 <p><strong>8.不安全的反序列化</strong></p>
 <p><strong>9.使用含有已知漏洞的组件</strong></p>
 <p><strong>10.不足的日志记录和监控</strong></p>
-]]></content>
-      <categories>
-        <category>专业技能</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>JAVA保底面试技巧</title>
-    <url>/2023/09/12/expertise_JAVA/</url>
-    <content><![CDATA[<h3 id="JAVA基础"><a href="#JAVA基础" class="headerlink" title="JAVA基础"></a>JAVA基础</h3><p>1.封装 继承 多态</p>
-<p>    封装就是隐藏对象的属性和实现细节，仅对外公开接口将抽象得到的数据和行为（或功能）相结合，<strong>形成一个有机的整体</strong></p>
-<p>    继承<strong>子类继承父类的特征和行为</strong></p>
-<p>多态指同一个行为具有多个不同表现形式（一个类实例（对象）的相同方法在不同情形有不同表现形式）<strong>三个必要条件</strong></p>
-<ul>
-<li>继承</li>
-<li>重写（子类继承父类后对父类方法进行重新定义）</li>
-<li>父类引用指向子类对象</li>
-</ul>
-<p><img src="https://s1.locimg.com/2023/09/12/25b23c84ee6cf.png" alt="1694516682202.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><br>    同样是Parent类的实例，p.call调用的是Son类的实现、p1.call调用的是Daughter的实现。</p>
-<p>2.常用的类</p>
-<p>字符串：</p>
-<p>    String对象一旦创建，其值是不能修改的，如果要修改，会重新开辟内存空间来存储修改之后的对象；而StringBuffer和StringBuilder对象的值是可以被修改的；</p>
-<p>StringBuffer 线程安全(几乎所有方法都是用了synchronized)的性能低</p>
-<p>StringBuild 线程不安全但是性能高</p>
-<p>    如果我们在实际开发过程中需要对字符串进行频繁的修改，不要使用String，否则会造成内存空间的浪费；当需要考虑线程安全的场景下使用 StringBuffer，如果不需要考虑线程安全，追求效率的场景下可以使用 StringBuilder。</p>
-<p>3.集合框架</p>
-<ul>
-<li><p>Collection接口</p>
-<ul>
-<li><p>List：元素可以重复，而且是有序的，可通过下标来进行数据的访问查找修改快 增加删除慢</p>
-<ul>
-<li><p>ArrayList集合：ArrayList底层是数组可以存储任意类型的数据数据，可以重复，<strong>查询效率高，添加和删除效率低</strong>线程不安全</p>
-</li>
-<li><p>LinkedList集合：以双向链表结构实现的，所以它的<strong>增加和删除的效率高</strong>，但是他的查询效率低</p>
-</li>
-</ul>
-</li>
-<li><p>Set：无序的容器，Set接口中的数据不允许重复。查找慢，插入删除快(底层数据结构是哈希表和红黑树)，Set集合使用equals()和hashCode()方法实现元素去重</p>
-<ul>
-<li><p>HashSet 不可以按照存入顺序取出</p>
-</li>
-<li><p>LinkedHashSet:可以按照存入顺序取出</p>
-</li>
-<li><p>TreeSet 有排序功能 实现接口重写方法改写比较规则</p>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>Map接口:以键值对方式存储数据</p>
-<ul>
-<li><p>HashMap</p>
-<ul>
-<li><p>JDK1.8之前HashMap底层是数组和链表+头插法结合在一起使用（其中存储数据时会涉及拉链冲突法  若遇到哈希冲突，则将冲突的值加到链表中即可）</p>
-</li>
-<li><p>JDK1.8之后当链表长度大于8时将链表转化成红黑树且使用尾插法</p>
-</li>
-</ul>
-</li>
-<li><p>LinkedHashMap：可以指定遍历顺序（比HashMap多维护了一个双链表）</p>
-</li>
-<li><p>TreeMap ：存储元素有序的</p>
-</li>
-</ul>
-</li>
-</ul>
-<p>4.    并行：多个处理器或多核处理器同时处理多个任务</p>
-<p>        并发：多个任务在同一个CPU核上，按照细分的时间片轮流执行，看上去好像是在同时进行</p>
-<p>一个程序至少有一个进程，一个进程至少有一个线程，一个进程也可以有多个线程来增加程序执行的速度</p>
-<p>5.java中创建线程方法</p>
-<p>继承Thread  实现Runnable接口 线程池创建</p>
-<h3 id="Spring"><a href="#Spring" class="headerlink" title="Spring"></a>Spring</h3><p>Spring是一个轻量级的IOC和AOP容器框架。是为Java应用程序提供基础性服务的一套框架，目的是用于简化企业应用程序的开发，它使得开发者只需要关心业务需求。</p>
-<p>IOC:控制反转 负责创建对象，管理这些对象的整个生命周期    所谓IoC，对于spring框架来说，就是由spring来负责控制对象的生命周期和对象间的关系。</p>
-<p>DI: 依赖注入，控制反转是通过依赖注入实现的   动态的向某个对象提供它所需要的其他对象。这一点是通过DI（Dependency Injection，依赖注入）</p>
-<p>AOP，一般称为面向切面，作为面向对象的一种补充，用于将那些与业务无关，但却对多个对象产生影响的公共行为和逻辑，抽取并封装为一个可重用的模块，这个模块被命名为“切面”（Aspect），减少系统中的重复代码，降低了模块间的耦合度，同时提高了系统的可维护性。可用于权限认证、日志、事务处理。</p>
-<p>1.SpringMVC的流程：</p>
-<ul>
-<li><p>用户向服务端发送一次请求，这个请求会先到前端控制器DispatcherServlet(也叫中央控制器)。</p>
-</li>
-<li><p>DispatcherServlet接收到请求后会调用HandlerMapping处理器映射器。由此得知，该请求该由哪个Controller来处理（并未调用Controller，只是得知）</p>
-</li>
-<li><p>DispatcherServlet调用HandlerAdapter处理器适配器，告诉处理器适配器应该要去执行哪个Controller</p>
-</li>
-<li><p>HandlerAdapter处理器适配器去执行Controller并得到ModelAndView(数据和视图)，并层层返回给DispatcherServlet</p>
-</li>
-<li><p>DispatcherServlet将ModelAndView交给ViewReslover视图解析器解析，然后返回真正的视图。</p>
-</li>
-<li><p>DispatcherServlet将模型数据填充到视图中</p>
-</li>
-<li><p>DispatcherServlet将结果响应给用户</p>
-</li>
-</ul>
-<p>2.常见注解</p>
-<ul>
-<li><p>@Component：把资源让 spring 来管理。相当于在 xml 中配置一个 bean。</p>
-</li>
-<li><p>@Controller @Service @Repository 表现层的注解。业务层的注解。持久层的注解。</p>
-</li>
-<li><p>@Autowired自动按照类型注入。当使用注解注入属性时， set 方法可以省略</p>
-</li>
-<li><p>@Configuration用于指定当前类是一个 spring 配置类，当创建容器时会从该类上加载注解。</p>
-</li>
-<li><p>@Bean该注解写在方法上，表明使用此方法创建一个对象，并且放入 spring 容器。</p>
-</li>
-</ul>
-<h3 id="MYSQL"><a href="#MYSQL" class="headerlink" title="MYSQL"></a>MYSQL</h3><p>调优</p>
-<ul>
-<li><p>通过 explain(查询优化神器)用来查看 SQL 语句的执行效果（其中关键词key 可以判断索引是否命中）</p>
-</li>
-<li><p>任何地方都不要使用 select *不要返回用不到的任何字段；用IN来替换OR；禁止不必要的Order By排序</p>
-</li>
-<li><p>索引列不能参与计算，保持列“干净”（b+树中存的都是数据表中的字段值，但进行检索时，需要把所有元素都应用函数才能比较，显然成本太大）</p>
-</li>
-<li><p>查询尽可能使用 limit 减少返回的行数， 减少数据传输时间和带宽浪费。</p>
-</li>
-</ul>
-<p>如何避免索引失效</p>
-<ul>
-<li><p>.最佳左前缀法则：如果索引有多列，如：联合索引，要遵守最左前缀法则。指的是查询从索引的最左前列开始并且不跳过索引中的列，否则将用不到索引</p>
-</li>
-<li><p>不在索引列上做任何操作：对索引进行表达式计算会导致索引失效</p>
-</li>
-</ul>
-<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>1、#{}和${}的区别是什么？</p>
-<p>#{}是预编译处理，${}是字符串替换。</p>
-<p>Mybatis在处理#{}时，会将sql中的#{}替换为?号，调用PreparedStatement的set方法来赋值；</p>
-<p>Mybatis在处理${}时，就是把${}替换成变量的值。</p>
-<p>使用#{}可以有效的防止SQL注入，提高系统安全性。</p>
-<p>2、get提交和post提交有何区别？</p>
-<ul>
-<li><p>get一般用于从服务器上获取数据，post一般用于向服务器传送数据</p>
-</li>
-<li><p>请求的时候参数的位置有区别：</p>
-</li>
-</ul>
-<p>get的参数是拼接在url后面，用户在浏览器地址栏可以看到</p>
-<p>post是放在http包的包体中，比如说用户注册，你不能把用户提交的注册信息用get的方式吧，那不是说把用户的注册信息都显示在Url上了吗，是不安全的</p>
-<ul>
-<li>能提交的数据有区别：</li>
-</ul>
-<p>get方式能提交的数据只能是文本，且大小不超过1024个字节</p>
-<p>post不仅可以提交文本还有二进制文件，所以说想上传文件的话，那我们就需要使用post请求方式</p>
-<h3 id="BK项目经历"><a href="#BK项目经历" class="headerlink" title="BK项目经历"></a>BK项目经历</h3><p>我们这个项目主要是炼钢质量全过程管控（QMS）的项目,一方面进行一级物料(钢管  刚板）跟踪   我们的平台会对炼钢现场采过来的一级数据进行展示（例如：转炉温度  角度 氧枪实时高度等）这个数据是随着产线生产一直变化的。然后会有进行时空转换的逻辑  例如：把时间数据转换成长度数据 (冷轧 热轧都会是用到   比如说  钢铁存在问题   会去追踪问题 可能会通过分析轧制力一级数据    刚 进去时间  出去时间   时间和轧制力的二维坐标   然后使用一级采数采上来的滚刀速度速度乘时间)   qms进行的过程数据分析     第二我们会处理追踪现场产生的二级数据（例如 某个钢坯进入产线 它的钢种钢号，厚度，宽度，加工设备，处理开始时间和结束时间 存到我们的数据库【通过同步工具进行定时启动】）</p>
-<p>一级数据： 我们通过通信协议与甲方现场plc连接获取数据  通过自研的边缘计算平台（可以在平台进行简单计算和一些不好采集数据点进行判定） 随后存在实时数据库中 显示再监控画面上</p>
-<p>二级数据：来自甲方二级数据库 检化验数据 （成分 含量） 和计量系统数据 （测长称重）等甲方测量系统同步存到我们自己mysql数据库中 用来大数据驾驶舱数据显示和一些数据分析使用</p>
-<p>大数据驾驶舱中数据：例如 月产钢量  通过mysql数据库筛选记录 （一条记录通常代表 某个钢坯进入产线，以及他的 钢种钢号，厚度，宽度）加入限制条件 相加获得。</p>
-<p>一级物料(钢管  刚板）跟踪    然后进行时空转换  把时间数据转换成长度数据 (冷轧 热轧都会是用到   比如说  刚铁存在问题   分析轧制力一级数据    刚 进去时间  出去时间   时间和轧制力的二维坐标   一级才上来的滚刀速度速度乘时间)   qms进行的过程数据分析</p>
 ]]></content>
       <categories>
         <category>专业技能</category>

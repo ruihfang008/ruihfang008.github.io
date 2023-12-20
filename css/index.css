@@ -742,8 +742,8 @@ html.is-animating .trm-swup-animation {
   color: var(--primary, #afb42b);
 }
 .trm-top-bar .container .trm-left-side .trm-logo-frame img {
-  width: 80px;
-  margin-right: 10px;
+  width: 250px;
+  margin-right: 20px;
 }
 .trm-top-bar .container .trm-right-side {
   height: 100%;
