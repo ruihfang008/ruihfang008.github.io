@@ -88,10 +88,10 @@
 <li><p>如果解密的结果和证书中的明文一直则通过  如果不通过风险提示！<img src="https://s1.locimg.com/2023/05/07/edb51e123699a.png" alt="1683454119844.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'>-</p>
 </li>
 <li><p>然后从证书中提取服务器的公钥加密随机数发送 协商出密钥进行传输。</p>
-<p><img src="https://s1.locimg.com/2023/05/07/147695db4e747.png" alt="1683454135892.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'>### 2. CA服务商</p>
-<p><strong>CA google microsoft</strong></p>
+<p><img src="https://s1.locimg.com/2023/05/07/147695db4e747.png" alt="1683454135892.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
 </li>
 </ul>
+<h3 id="2-CA服务商"><a href="#2-CA服务商" class="headerlink" title="2. CA服务商"></a>2. CA服务商</h3><p>  <strong>CA google microsoft</strong></p>
 <h3 id="3-CA存在问题"><a href="#3-CA存在问题" class="headerlink" title="3. CA存在问题"></a>3. CA存在问题</h3><p>浏览器内置信任的CA证书（此时CA便是中心，<mark>问题CA是否值得100%信任？</mark>）</p>
 <p>问题最终还是要<strong>去中心化</strong></p>
 <hr>
@@ -753,6 +753,15 @@ $$
 ]]></content>
       <categories>
         <category>专业技能</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>日常办公技巧1</title>
+    <url>/2024/01/10/expertise_TIP1/</url>
+    <content><![CDATA[<h1 id="当出现日常繁琐重复得业务需求时候，考虑通过写脚本去解决。"><a href="#当出现日常繁琐重复得业务需求时候，考虑通过写脚本去解决。" class="headerlink" title="当出现日常繁琐重复得业务需求时候，考虑通过写脚本去解决。"></a>当出现日常繁琐重复得业务需求时候，考虑通过写脚本去解决。</h1><p><strong>例如：有个需求就是我有一篇文章很长得docx文档格式需要调整，当时例如需要把所有的三级标题换统一字体字号，如果一个一个选中或者格式刷解决非常繁琐，这个时候我们便可以使用python写脚本来“偷懒”。</strong></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> docx <span class="keyword">import</span> Document</span><br><span class="line"><span class="keyword">from</span> docx.shared <span class="keyword">import</span> Pt</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">modify_heading_font</span>(<span class="params">doc, heading_level, new_font_name, new_font_size</span>):</span><br><span class="line">    <span class="keyword">for</span> paragraph <span class="keyword">in</span> doc.paragraphs:</span><br><span class="line">        <span class="keyword">if</span> paragraph.style.name.startswith(<span class="string">f&quot;Heading <span class="subst">&#123;heading_level&#125;</span>&quot;</span>):</span><br><span class="line">            <span class="keyword">for</span> run <span class="keyword">in</span> paragraph.runs:</span><br><span class="line">                run.font.name = new_font_name</span><br><span class="line">                run.font.size = Pt(new_font_size)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    docx_path = <span class="string">&quot;I:\\Pytest\\自己文件位置.docx&quot;</span>  <span class="comment"># 替换为你的文档路径</span></span><br><span class="line">    heading_level_to_modify = [<span class="number">5</span>]  <span class="comment"># 要修改的标题级别列表，这里只包含三级标题</span></span><br><span class="line">    new_font_name = <span class="string">&quot;宋体&quot;</span>  <span class="comment"># 替换为你想要的字体名称</span></span><br><span class="line">    new_font_size_heading3 = <span class="number">9</span>  <span class="comment"># 设置三级标题字体大小为四号</span></span><br><span class="line"></span><br><span class="line">    doc = Document(docx_path)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> level <span class="keyword">in</span> heading_level_to_modify:</span><br><span class="line">        modify_heading_font(doc, level, new_font_name, new_font_size_heading3)</span><br><span class="line"></span><br><span class="line">    doc.save(<span class="string">&quot;I:\\Pytest\\修改后新文件.docx&quot;</span>)  <span class="comment"># 保存修改后的文档</span></span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>日常工具</category>
       </categories>
   </entry>
 </search>
